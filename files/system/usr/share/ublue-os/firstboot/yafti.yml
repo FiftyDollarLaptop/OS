@@ -1,0 +1,83 @@
+title: Finish setting up your computer...
+properties:
+  mode: "run-on-change"
+  path: "~/.config/yafti/last-run"
+actions:
+  pre:
+    - run: flatpak remote-delete --system --force fedora
+    - run: flatpak remote-delete --user --force fedora
+    - run: flatpak remove --system --noninteractive --all
+    - run: flatpak remote-add --if-not-exists --system flathub https://flathub.org/repo/flathub.flatpakrepo
+    - run: flatpak remote-add --if-not-exists --user flathub https://flathub.org/repo/flathub.flatpakrepo
+    - yafti.plugin.flatpak:
+        install: org.gnome.Calculator
+  post:
+    - run: /run/these/commands --after --all --screens
+screens:
+  first-screen:
+    source: yafti.screen.title
+    values:
+      title: "That was pretty cool"
+      icon: "/path/to/icon"
+      description: |
+        Time to play overwatch
+  applications:
+    source: yafti.screen.package
+    values:
+      title: Install apps...
+      show_terminal: false
+      package_manager: yafti.plugin.flatpak
+      groups:
+        Browsers:
+          description: For using the internet
+          packages:
+            - Chrome: com.google.Chrome
+            - Firefox: org.mozilla.firefox
+            - Edge: com.microsoft.Edge
+            - Chromium: com.chromium.Chromium
+            - Vivaldi: com.vivaldi.Vivaldi
+            - Zen Browser: io.github.zen_browser.zen
+        Gaming:
+          description: Have fun!
+          packages:
+            - Steam: com.valvesoftware.Steam
+            - Minecraft (via Modrinth): com.modrinth.ModrinthApp
+            - Built-in games: org.gnome.Games
+        Messaging: 
+          description: For talking to people
+          packages: 
+            - Signal: org.signal.Signal
+            - Discord (via Vesktop): dev.vencord.Vesktop
+            
+        Office:
+          description: All the work stuff
+          default: true
+          packages:
+            - LibreOffice: org.libreoffice.LibreOffice
+            - Calendar: org.gnome.Calendar
+        Organization:
+          packages: 
+            - Obsidian: md.obsidian.Obsidian
+            - LogSeq: com.logseq.Logseq
+        Windows App Support:
+          description: Software that lets you run some Windows software on this computer
+          packages: 
+            - Bottles: com.usebottles.bottles
+            - ProtonTricks: com.github.Matoking.protontricks
+            
+        Utilities: 
+          description: Software that you may need at some point. HIGHLY RECOMMENDED.
+          default: true
+          packages:
+            - Gear Lever (AppImage support): it.mijorus.gearlever
+            
+            - Peek (Simple Screen Recorder): com.uploadedlobster.peek
+            - Flatseal (App permissions management): com.github.tchx84.Flatseal
+            
+  final-screen:
+    source: yafti.screen.title
+    values:
+      title: "All done"
+      icon: "/path/to/icon"
+      description: |
+        Thanks for installing, join the community, next steps
